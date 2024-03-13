@@ -4,6 +4,7 @@ export class Event {
 
     constructor(eventName: string) {
         this.name = eventName;
+        
     }
 
 
