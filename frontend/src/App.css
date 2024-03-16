@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+
+.fade-alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  opacity: 0; /* Start with opacity 0 to avoid initial flash */
+  transition: opacity 1s ease-in-out; /* Set transition duration */
+}
+
+.fade-alert.show {
+  opacity: 1; /* Show the alert by setting opacity to 1 */
+}
+
+.fade-out {
+  animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 3;
+  }
+  to {
+    opacity: 0;
+  }
+}
