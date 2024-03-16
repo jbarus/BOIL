@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom"
 import { Group, TextInput, Select, Button, Text, Space, NumberInput, MultiSelect, ComboboxItem,Alert } from '@mantine/core';
 import React, { useState, MouseEventHandler, useEffect } from 'react';
 import { Event, Action } from "./CpmClass";
-
+import { IconInfoCircle } from '@tabler/icons-react';
 
 
 
@@ -26,7 +26,9 @@ export const CpmForm = () => {
     const [nameStart, setNameStart] = useState<string[]>([]);
     const [nameEnd, setNameEnd] = useState<string[]>([]);
     const [formData, setFormData] = useState<{ name: string; time:number | string; start: string|null; end: string|null; }[]>([]);
-
+    const [showAlert, setShowAlert] = useState(false); // State to control alert visibility
+    const [fadeOut, setFadeOut] = useState(false);
+    const icon = <IconInfoCircle />;
 
     const [selectedRows, setSelectedRows] = useState<number[]>([]);
     //funkcja wywołująca się po zmmianie tekstu w polu tekstowym
@@ -63,6 +65,15 @@ export const CpmForm = () => {
         if (eventName && !nameStart.includes(eventName)) {
             setNameStart(prevNames => [...prevNames, eventName]);
             setNameEnd(prevNames => [...prevNames, eventName]);
+            
+        setShowAlert(true);
+        setTimeout(() => {
+            setFadeOut(true);
+            setTimeout(() => {
+                setShowAlert(false);
+                setFadeOut(false); // Reset fade-out state
+            }, 1000); 
+        }, 1000);
         }
     };
 
@@ -99,7 +110,19 @@ export const CpmForm = () => {
                 onClick={eventOnClick}
             >Potwierdź
             </Button>
-          
+
+            {showAlert && (
+                <Alert
+                className={fadeOut ? 'fade-out' : ''}
+                variant="light"
+                color="blue"
+                title="Zdarzenie dodano"
+                icon={icon}
+                onClose={() => setShowAlert(false)}
+                onAnimationEnd={() => setShowAlert(false)}
+                >
+                </Alert>
+            )}
             <Space h="md" />
 
             {/* Dodawanie  nowejo czynności */}
