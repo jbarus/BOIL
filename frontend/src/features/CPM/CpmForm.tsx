@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { Group, TextInput, Select, Button, Text, Space, NumberInput, MultiSelect } from '@mantine/core';
+import { Group, TextInput, Select, Button, Text, Space, NumberInput, MultiSelect, Combobox,useCombobox  } from '@mantine/core';
 import React, { useState, MouseEventHandler } from 'react';
 import { Event, Action } from "./CpmClass";
 
@@ -71,7 +71,7 @@ export const CpmForm = () => {
             setNameStart(names)
         }
 
-
+        const combobox = useCombobox();
 
 
     }
@@ -137,7 +137,9 @@ export const CpmForm = () => {
                 placeholder="Pick value"
                 data={nameStart}
             />
+<Combobox store={nameStart}>
 
+</Combobox>
 
         </Group>
         <Space h="md" />
