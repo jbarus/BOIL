@@ -1,5 +1,6 @@
 package com.example.boil.cpm;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 
@@ -8,9 +9,11 @@ import java.util.List;
 
 @Data
 @ToString
-class Event{
+public class Event{
+    @JsonIgnore
     @ToString.Exclude
     List<Event> next = new ArrayList<>();
+    @JsonIgnore
     @ToString.Exclude
     List<Event> previous = new ArrayList<>();
     String name;

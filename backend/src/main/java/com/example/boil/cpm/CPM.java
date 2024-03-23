@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CPM {
     private HashMap<String,Event> eventMap = new HashMap<>();
@@ -13,24 +14,6 @@ public class CPM {
     List<List<Event>> possiblePaths = new ArrayList<>();
     private Event start = null;
     private Event finish = null;
-
-    @Data
-    @ToString
-    private class Activity{
-        int id;
-        String name;
-        int cost;
-        String startId;
-        String endId;
-
-        public Activity(String name, int cost, String startId, String endId) {
-            this.name = name;
-            this.cost = cost;
-            this.startId = startId;
-            this.endId = endId;
-            id = activityIdCounter++;
-        }
-    }
 
     public void addEvent(String name){
         Event event = new Event(name);
@@ -42,7 +25,7 @@ public class CPM {
             eventMap.put(name,event);
     }
 
-    public void addActivity(String name,int cost, String startName,String endName){
+    /*public void addActivity(String name,int cost, String startName,String endName){
         if(eventMap.containsKey(startName)&&eventMap.containsKey(endName)){
             Activity activity = new Activity(name,cost,startName,endName);
             eventMap.get(startName).getNext().add(eventMap.get(endName));
@@ -51,14 +34,22 @@ public class CPM {
         }else
             return;
 
+    }*/
+
+    public void addActivity(Activity activity){
+        if(eventMap.containsKey(activity.getStartId())&&eventMap.containsKey(activity.getEndId())){
+            activityMap.put(activity.getStartId()+activity.getEndId(),activity);
+            eventMap.get(activity.getStartId()).getNext().add(eventMap.get(activity.getEndId()));
+            eventMap.get(activity.getEndId()).getPrevious().add(eventMap.get(activity.getStartId()));
+        }
     }
 
-    public void solve(){
+    public List<Event> solve(){
         findPaths();
         findStarts();
         findFinishes();
         findLooses();
-
+        return List.copyOf(eventMap.values());
     }
 
     private void findLooses() {

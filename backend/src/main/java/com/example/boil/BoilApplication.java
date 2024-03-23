@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BoilApplication {
 
 	public static void main(String[] args) {
-		CPM cpm = new CPM();
+		/*CPM cpm = new CPM();
 		for (int i = 1; i < 10; i++) {
 			cpm.addEvent(String.valueOf(i));
 		}
@@ -22,7 +22,7 @@ public class BoilApplication {
 		cpm.addActivity("H",4,"6","7");
 		cpm.addActivity("I",1,"7","8");
 		cpm.addActivity("J",2,"8","9");
-		cpm.solve();
+		cpm.solve();*/
 		SpringApplication.run(BoilApplication.class, args);
 	}
 
