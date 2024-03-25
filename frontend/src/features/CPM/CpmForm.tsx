@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
-import { Group, TextInput, Select, Button, Text, Space, NumberInput, MultiSelect, ComboboxItem,Alert } from '@mantine/core';
+import { Group, TextInput, Select, Button, Text, Space, NumberInput, MultiSelect, ComboboxItem, Alert } from '@mantine/core';
 import React, { useState, MouseEventHandler, useEffect } from 'react';
-import { Event, Action } from "./CpmClass";
+import { Event, Activity } from "../../types/CpmClass";
 
 
 
@@ -11,13 +11,12 @@ export const CpmForm = () => {
     // const{id}=useParams();
 
 
-    // let eventName: string;
-    // let actionName: string;
-    // let names: string[] = [];
-    // const events: Event[] = [];
-    // const actions: Action[] = [];
+
+
 
     //useState MultiSelect początkowy
+    const [eventUse, setEventUse] = useState<Event[]>([]);
+    const [activityUse, setactivityUse] = useState<Activity[]>([]);
     const [eventName, setEventName] = useState("");
     const [actionName, setActionName] = useState("");
     const [actionTime, setActionTime] = useState<number | string>(0);
@@ -25,7 +24,7 @@ export const CpmForm = () => {
     const [actionEnd, setActionEnd] = useState<null | string>("");
     const [nameStart, setNameStart] = useState<string[]>([]);
     const [nameEnd, setNameEnd] = useState<string[]>([]);
-    const [formData, setFormData] = useState<{ name: string; time:number | string; start: string|null; end: string|null; }[]>([]);
+    const [formData, setFormData] = useState<{ name: string; time: number | string; start: string | null; end: string | null; }[]>([]);
 
 
     const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -35,8 +34,10 @@ export const CpmForm = () => {
         console.log("FormData:", formData);
     }, [formData]);
 
-    const handleInputChangeEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEventName(event.target.value);
+    const handleInputChangeEvent = (newValue: number | string) => {
+
+        const stringValue: string = newValue.toString();
+        setEventName(stringValue);
     };
 
     const handleInputChangeAction = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,30 +62,61 @@ export const CpmForm = () => {
 
     const eventOnClick = () => {
         if (eventName && !nameStart.includes(eventName)) {
+            const tmp = new Event(eventName);
+
+            if (eventName == "1") {
+                tmp.start = 1;
+            }
+            setEventUse(prevEvents => [...prevEvents, tmp]);
             setNameStart(prevNames => [...prevNames, eventName]);
             setNameEnd(prevNames => [...prevNames, eventName]);
+
+
+
+
+
         }
     };
 
+    const findEventByName = (eventName: string): Event => {
+        let myObject: Event | undefined = eventUse.find(event => event.name === eventName);
+        let eventbyname=myObject as Event;
+        return  eventbyname;
+    };
+
     const eventOnClick2 = () => {
-        console.log("Button clicked with event:", eventName, "and action:", actionName);
+        //console.log("Button clicked with event:", eventName, "and action:", actionName);
+
         if (eventName && actionName && nameStart.includes(eventName) && nameEnd.includes(eventName)) {
+            const actionEndString: string = actionEnd ?? "";
+            const actionStartString: string = actionStart ?? "";
+            const timeNumber: number = typeof actionTime === "string" ? parseFloat(actionTime) : actionTime as number;
+
+
+            let tmpActivity:Activity= new Activity(actionName,timeNumber,actionStartString,actionEndString )
+
+            setactivityUse(prevActivity => [...prevActivity, tmpActivity]);
             const newData = {
                 name: actionName,
-            time:actionTime,
-               
+                time: actionTime,
+
                 start: actionStart,
                 end: actionEnd
             };
             setFormData(prevData => [...prevData, newData]);
+           
+
         }
+        console.log("hejka tu lenka");
+        console.log(activityUse);
+
     };
 
     return (
         <div>
             <Text>Dodaj zdarzenie</Text>
             <Group>
-                <TextInput
+                <NumberInput
                     onChange={handleInputChangeEvent}
                     placeholder="Nazwa"
                 />
@@ -99,7 +131,7 @@ export const CpmForm = () => {
                 onClick={eventOnClick}
             >Potwierdź
             </Button>
-          
+
             <Space h="md" />
 
             {/* Dodawanie  nowejo czynności */}
@@ -124,7 +156,7 @@ export const CpmForm = () => {
                     onChange={startOnChange}
                 />
                 <Select
-                onChange={endOnChange}
+                    onChange={endOnChange}
                     placeholder="Zdarzenie końcowe"
                     data={nameEnd.map(name => ({ value: name, label: name }))}
                 />
@@ -139,7 +171,7 @@ export const CpmForm = () => {
             <Space h="md" />
             <div style={{ overflowX: 'auto' }}>
                 <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-                    
+
                     <thead>
                         <tr style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #dee2e6' }}>
                             <th style={{ padding: '10px', textAlign: 'left', borderBottom: '1px solid #dee2e6' }}>Nazwa</th>
