@@ -40,8 +40,8 @@
 
 .fade-alert {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 13px;
+  left: 2px;
   opacity: 0; /* Start with opacity 0 to avoid initial flash */
   transition: opacity 1s ease-in-out; /* Set transition duration */
 }
