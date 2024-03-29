@@ -144,8 +144,8 @@ export const CpmForm = () => {
                 style={{ width: '10%' }}
             />
 
-            {/* Text field z czasem wykonania */}
-            <NumberInput
+                {/* Text field z czasem wykonania */}
+                <NumberInput
 
                 onChange={handleNumberInputChange}
                 placeholder="Wprowadz czas wykonania"
