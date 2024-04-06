@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 @RestController()
-@RequestMapping("/api/v1/cpm")
+@CrossOrigin(origins = "http://localhost:3000/")
+@RequestMapping(path="/api/v1/cpm")
 public class CPMController {
 
     @PostMapping(path = "/activity")
@@ -28,6 +29,12 @@ public class CPMController {
             cpm.addActivity(a);
         }
         List<Event> events = cpm.solve();
+        System.out.println(ResponseEntity.ok(events));
         return ResponseEntity.ok(events);
+    }
+    @PostMapping(path = "/test")
+    public ResponseEntity<String> test(@RequestBody String test){
+        System.out.println(test);
+        return ResponseEntity.ok(test);
     }
 }
