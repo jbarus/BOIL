@@ -5,6 +5,8 @@ import { Event, Activity } from "../../types/CpmClass";
 
 import { graph } from '../../utils';
 
+const BASE_API_URL = "http://localhost:8080/api/"
+
 export const CpmForm = () => {
     // const{id}=useParams();
     //useState MultiSelect początkowy
@@ -23,7 +25,7 @@ export const CpmForm = () => {
     
     const [showAlert, setShowAlert] = useState(false);
 
-    const [selectedRows, setSelectedRows] = useState<number[]>([]);
+
     //funkcja wywołująca się po zmmianie tekstu w polu tekstowym
 
     useEffect(() => {
@@ -128,10 +130,47 @@ export const CpmForm = () => {
 
     const diagram_click = () => {
         console.log("Diagram dupa clicked");
-        //setShowDiagram(true);
-        //const cy = graph(activityUse, eventUse);
+        fetchData();
+        // console.log(activityUse)
+        // console.log(eventUse)
+    //     if(activityUse==null||eventUse==null)
+    //   {console.log("Activity bądź event puste brachu")  
+
+    //   }
+    //     else{
+    //         setShowDiagram(true);
+    //     const cy = graph(activityUse, eventUse);
+    //     }
         
     };
+
+    const fetchData = async ()=>{
+        try {
+            console.log( JSON.stringify(activityUse));
+            const response = await fetch(BASE_API_URL + 'v1/cpm/activity',{
+                
+                method: 'POST',
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(activityUse),
+            }
+       
+            );
+            if (response.ok) {
+                const responseBody = await response.json(); // Parse response body as JSON
+                console.log('Success');
+                console.log(responseBody);
+              } else {
+                console.error('Error ');
+              }
+                   }
+                 catch (error) {
+                    console.error('Error:', error);
+                  }
+    }
 
     return (
         <div>
