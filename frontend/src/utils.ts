@@ -2,7 +2,7 @@ import cytoscape from 'cytoscape';
 import { Event, Activity } from "./types/CpmClass";
 
 export const graph = (activities: Activity[], events: Event[]) => {
-    const nodes = activities.map(activity => ({
+    const edges = activities.map(activity => ({
         data: {
             id: activity.name,
             values: `${activity.name}\n${activity.start} - ${activity.end}\nTime: ${activity.time}`,
@@ -10,7 +10,7 @@ export const graph = (activities: Activity[], events: Event[]) => {
         }
     }));
 
-    const edges = events.map(event => ({
+    const nodes = events.map(event => ({
         data: {
             source: event.previous[0].name,
             target: event.name,
@@ -22,8 +22,8 @@ export const graph = (activities: Activity[], events: Event[]) => {
     let cy = cytoscape({
         container: document.getElementById('cy'),
         elements: [
-            ...nodes,
-            ...edges
+            ...edges,
+            ...nodes
         ],
         style: [
             {

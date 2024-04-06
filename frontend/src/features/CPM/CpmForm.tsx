@@ -11,6 +11,7 @@ export const CpmForm = () => {
     // const{id}=useParams();
     //useState MultiSelect początkowy
     const [eventUse, setEventUse] = useState<Event[]>([]);
+    const [eventUseGet, setEventUseGet] = useState<Event[]>([]);
     const [activityUse, setactivityUse] = useState<Activity[]>([]);
     const [eventName, setEventName] = useState("");
     const [actionName, setActionName] = useState("");
@@ -131,16 +132,11 @@ export const CpmForm = () => {
     const diagram_click = () => {
         console.log("Diagram dupa clicked");
         fetchData();
-        // console.log(activityUse)
-        // console.log(eventUse)
-    //     if(activityUse==null||eventUse==null)
-    //   {console.log("Activity bądź event puste brachu")  
-
-    //   }
-    //     else{
-    //         setShowDiagram(true);
-    //     const cy = graph(activityUse, eventUse);
-    //     }
+          
+        
+            setShowDiagram(true);
+        const cy = graph(activityUse, eventUseGet);
+        
         
     };
 
@@ -162,7 +158,9 @@ export const CpmForm = () => {
             if (response.ok) {
                 const responseBody = await response.json(); // Parse response body as JSON
                 console.log('Success');
-                console.log(responseBody);
+            
+                setEventUseGet(responseBody);
+                console.log(eventUseGet);
               } else {
                 console.error('Error ');
               }
