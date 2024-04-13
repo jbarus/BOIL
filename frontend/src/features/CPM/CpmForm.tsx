@@ -21,7 +21,7 @@ export const CpmForm = () => {
     const [nameStart, setNameStart] = useState<string[]>([]);
     const [nameEnd, setNameEnd] = useState<string[]>([]);
     const [formData, setFormData] = useState<{ name: string; time: number | string; start: string | null; end: string | null; }[]>([]);
-    const [showDiagram, setShowDiagram] = useState(false);
+    const [showDiagram, setShowDiagram] = useState(true);
     const [editableIndex, setEditableIndex] = useState<number | null>(null);
     
     const [showAlert, setShowAlert] = useState(false);
@@ -113,32 +113,67 @@ export const CpmForm = () => {
 
     };
 
-    const handleEdit = (index: number | undefined) => {
+    const handleEdit = async (index: number | undefined) => {
         if (index !== undefined) {
             setEditableIndex(index);
+            try {
+                const response = await fetch(BASE_API_URL + 'v1/cpm/edit', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData[index]) 
+                });
+    
+                if (response.ok) {
+                    console.log('dane zmienione');
+                } else {
+                    console.error('dane nie zmienione');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
         } else {
-            setEditableIndex(null); //null-linia nie jest edytowana
+            setEditableIndex(null); 
         }
-        console.log("Delete clicked for index:", index);
     };
     
-    const handleDelete = (index: number) => {
-        const newData = [...formData];
-        newData.splice(index, 1);
-        setFormData(newData);
-        console.log("Delete clicked for index:", index);
+    const handleDelete = async (index: number) => {
+        try {
+            const newData = [...formData];
+            newData.splice(index, 1);
+            setFormData(newData);
+            const response = await fetch(BASE_API_URL + 'v1/cpm/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ index }) 
+            });
+    
+            if (response.ok) {
+                console.log('dane usuniete');
+            } else {
+                console.error('dane nie usuniete');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
-    const diagram_click = () => {
+
+    const diagram_click = async () => {
         console.log("Diagram dupa clicked");
-        fetchData();
-          
-        
-            setShowDiagram(true);
+        await fetchData();
+        setShowDiagram(true);
         const cy = graph(activityUse, eventUseGet);
-        
-        
     };
+    const Oblicz = async () => {
+        console.log("Diagram dupa clicked");
+        await fetchData();
+       
+    };
+
 
     const fetchData = async ()=>{
         try {
@@ -158,9 +193,9 @@ export const CpmForm = () => {
             if (response.ok) {
                 const responseBody = await response.json(); // Parse response body as JSON
                 console.log('Success');
-            
-                setEventUseGet(responseBody);
-                console.log(eventUseGet);
+            let tmp:Event[]=responseBody
+                setEventUseGet(tmp);
+                console.log(tmp);
               } else {
                 console.error('Error ');
               }
@@ -239,6 +274,14 @@ export const CpmForm = () => {
                 onClick={diagram_click}
             >   Diagram  
             </Button>
+
+            <Button
+                variant="gradient"
+                gradient={{ from: 'red', to: 'blue', deg: 263 }}
+                onClick={Oblicz}
+            >   Oblicz  
+            </Button>
+
             <div style={{ overflowX: 'auto', maxHeight: '300px', overflowY: 'auto' }}>
             <table style={{ borderCollapse: 'collapse', width: '100%', borderBottom: '4px solid black' }}>
                 <thead>

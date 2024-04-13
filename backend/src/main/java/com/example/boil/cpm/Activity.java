@@ -9,11 +9,11 @@ import lombok.ToString;
 public class Activity{
     int id;
     String name;
-    @JsonProperty("time")
+  //  @JsonProperty("time")
     int cost;
-    @JsonProperty("start")
+  //  @JsonProperty("start")
     String startId;
-    @JsonProperty("end")
+  //  @JsonProperty("end")
     String endId;
 
     public Activity(String name, int cost, String startId, String endId) {
