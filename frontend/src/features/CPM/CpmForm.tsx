@@ -113,61 +113,38 @@ export const CpmForm = () => {
 
     };
 
-    const handleEdit = async (index: number | undefined) => {
-        if (index !== undefined) {
-            setEditableIndex(index);
-            try {
-                const response = await fetch(BASE_API_URL + 'v1/cpm/edit', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData[index]) 
-                });
+    const handleDelete = (indexToDelete: number) => {
+        const updatedFormData = [...formData];
+        updatedFormData.splice(indexToDelete, 1); 
+        setFormData(updatedFormData);
     
-                if (response.ok) {
-                    console.log('dane zmienione');
-                } else {
-                    console.error('dane nie zmienione');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        } else {
-            setEditableIndex(null); 
-        }
+   
+        const updatedActivityUse = [...activityUse];
+        updatedActivityUse.splice(indexToDelete, 1);
+        setactivityUse(updatedActivityUse);
     };
     
-    const handleDelete = async (index: number) => {
-        try {
-            const newData = [...formData];
-            newData.splice(index, 1);
-            setFormData(newData);
-            const response = await fetch(BASE_API_URL + 'v1/cpm/delete', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ index }) 
+    const handleEdit = (indexToEdit: number | undefined) => {
+        if (indexToEdit !== undefined) {
+            setEditableIndex(indexToEdit); 
+        } else {
+            setEditableIndex(null); 
+            const updatedActivityUse = formData.map(data => {
+                return new Activity(data.name, parseFloat(data.time as string), data.start as string, data.end as string);
             });
-    
-            if (response.ok) {
-                console.log('dane usuniete');
-            } else {
-                console.error('dane nie usuniete');
-            }
-        } catch (error) {
-            console.error('Error:', error);
+            setactivityUse(updatedActivityUse);
         }
     };
 
 
     const diagram_click = async () => {
-        console.log("Diagram dupa clicked");
-        await fetchData();
-        setShowDiagram(true);
+        console.log("Fetching data...");
+        await fetchData(); 
+        console.log("Data fetched successfully");
+        setShowDiagram(true); 
         const cy = graph(activityUse, eventUseGet);
     };
+
     const Oblicz = async () => {
         console.log("Diagram dupa clicked");
         await fetchData();
@@ -279,6 +256,7 @@ export const CpmForm = () => {
                 variant="gradient"
                 gradient={{ from: 'red', to: 'blue', deg: 263 }}
                 onClick={Oblicz}
+                style={{ marginLeft: '10px' }} 
             >   Oblicz  
             </Button>
 
@@ -355,13 +333,13 @@ export const CpmForm = () => {
                                 </td>
                                 <td style={{ padding: '10px' }}>
                                     {editableIndex === index ? (
-                                        <Button variant="outline" onClick={() => handleEdit(undefined)}>Save</Button>
+                                        <Button variant="outline" onClick={() => handleEdit(undefined)}>Zapisz</Button>
                                     ) : (
-                                        <Button variant="outline" onClick={() => handleEdit(index)}>Edit</Button>
+                                        <Button variant="outline" onClick={() => handleEdit(index)}>Edytuj</Button>
                                     )}
                                 </td>
                                 <td style={{ padding: '10px' }}>
-                                    <Button variant="outline" onClick={() => handleDelete(index)}>Delete</Button>
+                                    <Button variant="outline" onClick={() => handleDelete(index)}>Usuń</Button>
                                 </td>
                             </tr>
                         ))}
