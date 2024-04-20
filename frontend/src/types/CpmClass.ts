@@ -1,10 +1,9 @@
-
 export class Event {
     start: number;
     name: string;
 
-    previous: Array<Event> = [];
-    next: Array<Event> = [];
+    // previous: Array<Event> = [];
+    // next: Array<Event> = [];
     
     finish: number;
     loose: number;
@@ -26,14 +25,14 @@ export class Event {
 
 export class Activity {
     name:string
-    time: number;
-    start: string;
-    end: string;
+    cost: number;
+    startId: string;
+    endId: string;
 
     constructor(name:string,time: number, start: string, end: string) {
         this.name=name;
-        this.start = start;
-        this.end = end;
-        this.time = time;
+        this.startId = start;
+        this.endId = end;
+        this.cost = time;
     }
 }
