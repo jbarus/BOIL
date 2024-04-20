@@ -165,6 +165,7 @@ export const CpmForm = () => {
     const diagram_click = async () => {
         console.log("Diagram dupa clicked");
         await fetchData();
+
         setShowDiagram(true);
         const cy = graph(activityUse, eventUseGet);
     };
