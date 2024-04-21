@@ -99,13 +99,13 @@ export const CpmForm = () => {
             if (isActivityExist) {
 
                 console.log("Ta aktywność już istnieje!");
-                setAlertMessage("Ta aktywność już istnieje lub błędny wybór połączenia akcji"); 
-                setShowAlert(true); 
+                setAlertMessage("Ta aktywność już istnieje lub błędny wybór połączenia akcji");
+                setShowAlert(true);
                 setTimeout(() => {
-                    setShowAlert(false); 
+                    setShowAlert(false);
                 }, 2000);
             } else {
-                
+
                 setactivityUse(prevActivity => [...prevActivity, tmpActivity]);
                 const newData = {
                     name: actionName,
@@ -160,26 +160,49 @@ export const CpmForm = () => {
 
         return oneStart;
     };
+    const checkIfOneEnd = (events: Event[], activities: Activity[]) => {
+        const connectionsCountMap: { [key: string]: number } = {};
+        activities.forEach(activity => {
+            const { startId, endId } = activity;
+            connectionsCountMap[startId] = connectionsCountMap[startId] ? connectionsCountMap[startId] + 1 : 1;
+            connectionsCountMap[endId] = connectionsCountMap[endId] ? connectionsCountMap[endId] - 1 : -1;
+        });
+        const oneEnd = Object.values(connectionsCountMap).filter(count => count === -1).length === 1;
+
+        return oneEnd;
+    };
+
 
     const diagram_click = async () => {
-        console.log("Fetching data...");
-        await fetchData();
-        console.log("Data fetched successfully");
-        setShowDiagram(true);
+    
+        const oneStart = checkIfOneStart(eventUse, activityUse);
+        const oneEnd = checkIfOneEnd(eventUse, activityUse);
+
+        if (oneStart && oneEnd)
+            {
+                setShowDiagram(true);
         const cy = graph(activityUse, eventUseGet);
+            }
+
+        
     };
 
     const Oblicz = async () => {
         console.log("Diagram dupa clicked");
         const oneStart = checkIfOneStart(eventUse, activityUse);
-
-        if (oneStart) {
+        const oneEnd = checkIfOneEnd(eventUse, activityUse);
+        if (oneStart && oneEnd) {
             await fetchData();
         } else {
             if (!oneStart) {
                 console.log("Więcej niż jeden start");
-                setAlertMessage("Więcej niż jeden start"); 
-                setShowAlert(true); 
+                setAlertMessage("Więcej niż jeden start");
+                setShowAlert(true);
+            }
+            if (!oneEnd) {
+                console.log("Więcej niż jeden koniec");
+                setAlertMessage("Więcej niż jeden koniec");
+                setShowAlert(true);
             }
         }
     };
@@ -201,7 +224,7 @@ export const CpmForm = () => {
 
             );
             if (response.ok) {
-                const responseBody = await response.json(); 
+                const responseBody = await response.json();
                 console.log('Success');
                 let tmp: Event[] = responseBody
                 setEventUseGet(tmp);
