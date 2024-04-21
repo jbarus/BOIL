@@ -6,17 +6,13 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class Activity{
-    int id;
+public class Activity {
     String name;
-  //  @JsonProperty("time")
-    int cost;
-  //  @JsonProperty("start")
+    double cost;
     String startId;
-  //  @JsonProperty("end")
     String endId;
 
-    public Activity(String name, int cost, String startId, String endId) {
+    public Activity(String name, double cost, String startId, String endId) {
         this.name = name;
         this.cost = cost;
         this.startId = startId;

@@ -28,8 +28,7 @@ public class CPMController {
         for (Activity a: activities){
             cpm.addActivity(a);
         }
-        List<Event> events = cpm.solve();
-        System.out.println(ResponseEntity.ok(events));
+        List<Event> events = cpm.calculate();
         return ResponseEntity.ok(events);
     }
     @PostMapping(path = "/test")
