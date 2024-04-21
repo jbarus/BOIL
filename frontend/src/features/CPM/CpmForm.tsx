@@ -150,29 +150,39 @@ export const CpmForm = () => {
     };
 
     const checkIfOneStart = (events: Event[], activities: Activity[]) => {
-        const connectionsCountMap: { [key: string]: number } = {};
+        const incomingConnectionsMap: { [key: string]: boolean } = {};
         activities.forEach(activity => {
-            const { startId, endId } = activity;
-            connectionsCountMap[endId] = connectionsCountMap[endId] ? connectionsCountMap[endId] + 1 : 1;
-            connectionsCountMap[startId] = connectionsCountMap[startId] ? connectionsCountMap[startId] - 1 : -1;
+            const { endId } = activity;
+            incomingConnectionsMap[endId] = true;
         });
-        const oneStart = Object.values(connectionsCountMap).filter(count => count === -1).length === 1;
-
-        return oneStart;
+    
+        let startEventsCount = 0;
+        events.forEach(event => {
+            if (!incomingConnectionsMap[event.name]) {
+                startEventsCount++;
+            }
+        });
+    
+        return startEventsCount === 1;
     };
+
     const checkIfOneEnd = (events: Event[], activities: Activity[]) => {
-        const connectionsCountMap: { [key: string]: number } = {};
+        const outgoingConnectionsMap: { [key: string]: boolean } = {};
         activities.forEach(activity => {
-            const { startId, endId } = activity;
-            connectionsCountMap[startId] = connectionsCountMap[startId] ? connectionsCountMap[startId] + 1 : 1;
-            connectionsCountMap[endId] = connectionsCountMap[endId] ? connectionsCountMap[endId] - 1 : -1;
+            const { startId } = activity;
+            outgoingConnectionsMap[startId] = true;
         });
-        const oneEnd = Object.values(connectionsCountMap).filter(count => count === -1).length === 1;
-
-        return oneEnd;
+    
+        let endEventsCount = 0;
+        events.forEach(event => {
+            if (!outgoingConnectionsMap[event.name]) {
+                endEventsCount++;
+            }
+        });
+    
+        return endEventsCount === 1;
     };
-
-
+    
     const diagram_click = async () => {
     
         const oneStart = checkIfOneStart(eventUse, activityUse);
@@ -191,18 +201,24 @@ export const CpmForm = () => {
         console.log("Diagram dupa clicked");
         const oneStart = checkIfOneStart(eventUse, activityUse);
         const oneEnd = checkIfOneEnd(eventUse, activityUse);
+
         if (oneStart && oneEnd) {
             await fetchData();
         } else {
             if (!oneStart) {
                 console.log("Więcej niż jeden start");
-                setAlertMessage("Więcej niż jeden start");
-                setShowAlert(true);
-            }
-            if (!oneEnd) {
+                setAlertMessage("Więcej niż jeden start"); 
+                setShowAlert(true); 
+                setTimeout(() => {
+                    setShowAlert(false); 
+                }, 2000);
+            }else if(!oneEnd){
                 console.log("Więcej niż jeden koniec");
-                setAlertMessage("Więcej niż jeden koniec");
-                setShowAlert(true);
+                setAlertMessage("Więcej niż jeden koniec"); 
+                setShowAlert(true); 
+                setTimeout(() => {
+                    setShowAlert(false); 
+                }, 2000); 
             }
         }
     };
