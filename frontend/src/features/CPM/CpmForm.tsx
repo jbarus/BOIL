@@ -8,8 +8,6 @@ import { graph } from '../../utils';
 const BASE_API_URL = "http://localhost:8080/api/"
 
 export const CpmForm = () => {
-    // const{id}=useParams();
-    //useState MultiSelect początkowy
     const [eventUse, setEventUse] = useState<Event[]>([]);
     const [eventUseGet, setEventUseGet] = useState<Event[]>([]);
     const [activityUse, setactivityUse] = useState<Activity[]>([]);
@@ -25,9 +23,7 @@ export const CpmForm = () => {
     const [editableIndex, setEditableIndex] = useState<number | null>(null);
 
     const [showAlert, setShowAlert] = useState(false);
-
-
-    //funkcja wywołująca się po zmmianie tekstu w polu tekstowym
+    const [alertMessage, setAlertMessage] = useState("");
 
     useEffect(() => {
         console.log("FormData:", formData);
@@ -53,10 +49,9 @@ export const CpmForm = () => {
 
     }
 
-    // funkcja wywołująca się po zmianie wartości w polu liczbowym
+
     const handleNumberInputChange = (newValue: number | string) => {
         setActionTime(newValue);
-        // console.log('Nowa wartość siemanko:', actionTime);
     };
 
     const eventOnClick = () => {
@@ -69,7 +64,7 @@ export const CpmForm = () => {
             setEventUse(prevEvents => [...prevEvents, tmp]);
             setNameStart(prevNames => [...prevNames, eventName]);
             setNameEnd(prevNames => [...prevNames, eventName]);
-
+            setAlertMessage("Dodano zdarzenie");
             setShowAlert(true);
 
             setTimeout(() => {
@@ -104,8 +99,13 @@ export const CpmForm = () => {
             if (isActivityExist) {
 
                 console.log("Ta aktywność już istnieje!");
+                setAlertMessage("Ta aktywność już istnieje lub błędny wybór połączenia akcji"); 
+                setShowAlert(true); 
+                setTimeout(() => {
+                    setShowAlert(false); 
+                }, 2000);
             } else {
-                //
+                
                 setactivityUse(prevActivity => [...prevActivity, tmpActivity]);
                 const newData = {
                     name: actionName,
@@ -149,6 +149,17 @@ export const CpmForm = () => {
         }
     };
 
+    const checkIfOneStart = (events: Event[], activities: Activity[]) => {
+        const connectionsCountMap: { [key: string]: number } = {};
+        activities.forEach(activity => {
+            const { startId, endId } = activity;
+            connectionsCountMap[endId] = connectionsCountMap[endId] ? connectionsCountMap[endId] + 1 : 1;
+            connectionsCountMap[startId] = connectionsCountMap[startId] ? connectionsCountMap[startId] - 1 : -1;
+        });
+        const oneStart = Object.values(connectionsCountMap).filter(count => count === -1).length === 1;
+
+        return oneStart;
+    };
 
     const diagram_click = async () => {
         console.log("Fetching data...");
@@ -160,8 +171,17 @@ export const CpmForm = () => {
 
     const Oblicz = async () => {
         console.log("Diagram dupa clicked");
-        await fetchData();
+        const oneStart = checkIfOneStart(eventUse, activityUse);
 
+        if (oneStart) {
+            await fetchData();
+        } else {
+            if (!oneStart) {
+                console.log("Więcej niż jeden start");
+                setAlertMessage("Więcej niż jeden start"); 
+                setShowAlert(true); 
+            }
+        }
     };
 
 
@@ -181,7 +201,7 @@ export const CpmForm = () => {
 
             );
             if (response.ok) {
-                const responseBody = await response.json(); // Parse response body as JSON
+                const responseBody = await response.json(); 
                 console.log('Success');
                 let tmp: Event[] = responseBody
                 setEventUseGet(tmp);
@@ -220,7 +240,7 @@ export const CpmForm = () => {
                 onClose={() => setShowAlert(false)}
                 className={`fade-alert ${showAlert ? 'show' : ''}`}
             >
-                Event added successfully!
+                {alertMessage}
             </Alert>
             <Space h="md" />
 
