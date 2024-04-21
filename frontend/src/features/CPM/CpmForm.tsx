@@ -101,6 +101,9 @@ export const CpmForm = () => {
                 console.log("Ta aktywność już istnieje!");
                 setAlertMessage("Ta aktywność już istnieje lub błędny wybór połączenia akcji"); 
                 setShowAlert(true); 
+                setTimeout(() => {
+                    setShowAlert(false); 
+                }, 2000);
             } else {
                 
                 setactivityUse(prevActivity => [...prevActivity, tmpActivity]);
