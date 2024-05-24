@@ -1,6 +1,6 @@
 import { RouteObject, useRoutes } from "react-router-dom";
 import { Layout } from "../components/Layout";
-import { CpmList } from "./CPM/CpmList";
+import { Transportation } from "./Transportation theory/Transportation";
 import { CpmForm } from "./CPM/CpmForm";
 import { ErrorPage } from "./error/ErrorPage";
 
@@ -10,8 +10,8 @@ const routs: RouteObject[] = [
         element: <Layout />,
         children: [
             {
-                path: '/CPM',
-                element: <CpmList />
+                path: '/transport',
+                element: <Transportation />
 
             },
             {
@@ -19,18 +19,18 @@ const routs: RouteObject[] = [
                 element: <CpmForm />
             },
             {
-                path:'/CPM/:id',
+                path: '/CPM/:id',
                 element: <CpmForm />
             },
             {
-                path:'*',
-                element:<ErrorPage/>
+                path: '*',
+                element: <ErrorPage />
             }
         ]
     }
 
 ]
 
-export const Routing =()=>{
+export const Routing = () => {
     return useRoutes(routs);
 }
