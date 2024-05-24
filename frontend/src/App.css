@@ -62,3 +62,17 @@
     opacity: 0;
   }
 }
+
+.transportation-container {
+  display: flex;
+}
+
+.left-panel {
+  width: 25%; /* Set width to 25% of the viewport width */
+  padding: 20px; /* Add padding for spacing */
+}
+
+.right-panel {
+  flex: 1; /* Take up remaining space */
+  padding: 20px; /* Add padding for spacing */
+}

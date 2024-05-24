@@ -22,23 +22,24 @@ export const Transportation = () => {
         setinputRecipientUse(newValue);
     };
 
-    return <div>
-        
-
-        <NumberInput
-            label="Liczba dostawców"
-            description="Wprowadź liczbę dostawców"
-            placeholder="0"
-            onChange={handleNumberInputChange}
-        >
-        </NumberInput>
-        <Button
-                variant="gradient"
-                gradient={{ from: 'red', to: 'blue', deg: 263 }}
-                onClick={recipientOnClick}
-            >Potwierdź
-            </Button>
-
-        <RecipientItem numberOfItems={numberUse} />
-    </div>
+    return (
+        <div className="transportation-container"> {/* Apply CSS class for styling */}
+            <div className="left-panel"> {/* Apply CSS class for left panel styling */}
+                <NumberInput
+                    label="Liczba dostawców"
+                    description="Wprowadź liczbę dostawców"
+                    placeholder="0"
+                    onChange={handleNumberInputChange}
+                />
+                <Button
+                    variant="gradient"
+                    gradient={{ from: 'red', to: 'blue', deg: 263 }}
+                    onClick={recipientOnClick}
+                >
+                    Potwierdź
+                </Button>
+                <RecipientItem numberOfItems={numberUse} /> {/* Place RecipientItem here */}
+            </div>
+        </div>
+    );
 }
