@@ -13,7 +13,7 @@ export const RecipientItem: React.FC<{ numberOfItems: number }> = ({ numberOfIte
         <div>
             {items.map((item, index) => (
                 <Card key={index} shadow="sm">
-             Dostawca nr.
+             Odbiorca
              <NumberInput
               label="Popyt"
               >
