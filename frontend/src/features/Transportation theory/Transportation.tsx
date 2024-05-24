@@ -1,7 +1,7 @@
 import { NumberInput, Button, TextInput, Group } from "@mantine/core";
 import { RecipientType } from "../../types/RecipientType"
 import React, { useState, MouseEventHandler, useEffect } from 'react';
-import { RecipientItem } from "./RecipientItem";
+import { RecipientItem } from "./recipientItem";
 import { SuplierItem } from "./SuplierItem";
 import { Tabela } from "./Tabela";
 export const Transportation = () => {

@@ -68,11 +68,11 @@
 }
 
 .left-panel {
-  width: 25%; /* Set width to 25% of the viewport width */
-  padding: 20px; /* Add padding for spacing */
+  width: 25%; 
+  padding: 20px; 
 }
 
 .right-panel {
-  flex: 1; /* Take up remaining space */
-  padding: 20px; /* Add padding for spacing */
+  flex: 1; 
+  padding: 20px; 
 }
