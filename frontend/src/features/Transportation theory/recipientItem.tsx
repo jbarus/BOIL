@@ -1,36 +1,56 @@
-import React,{FC,memo} from "react"
-import {RecipientType} from "../../types/RecipientType"
-import { Button, Card, NumberInput, TextInput } from "@mantine/core";
+import React, { useState } from "react";
+import { RecipientType } from "../../types/RecipientType";
+import { Button, Card, NumberInput } from "@mantine/core";
 
 interface RecipientItemProps {
-    item: RecipientType; // Assuming RecipientType is your item type
+  numberOfItems: number;
+  onConfirm: (recipient: RecipientType, index: number) => void;
 }
 
-export const RecipientItem: React.FC<{ numberOfItems: number }> = ({ numberOfItems }) => {
-    const items = Array.from({ length: numberOfItems }, (_, index) => index);
+export const RecipientItem: React.FC<RecipientItemProps> = ({ numberOfItems, onConfirm }) => {
+  const items = Array.from({ length: numberOfItems }, (_, index) => index);
 
-    return (
-        <div>
-            {items.map((item, index) => (
-                <Card key={index} shadow="sm">
-             Odbiorca
-             <NumberInput
-              label="Popyt"
-              >
-            
-             </NumberInput>
+  const [demandUse, setDemandUse] = useState<number[]>(Array(numberOfItems).fill(0));
+  const [unitPurchaseCostsUse, setUnitPurchaseCosts] = useState<number[]>(Array(numberOfItems).fill(0));
 
-             <NumberInput
-              label="Jednostkowy koszt zakupu"
-              >
-            
-             </NumberInput>
-                    
-                    <Button>
-                        Potwierdź
-                    </Button>
-                </Card>
-            ))}
-        </div>
-    );
+  const handleDemandInputChange = (value: number, index: number) => {
+    const newDemandUse = [...demandUse];
+    newDemandUse[index] = value;
+    setDemandUse(newDemandUse);
+  };
+
+  const handleUnitSellCostInputChange = (value: number, index: number) => {
+    const newUnitPurchaseCostsUse = [...unitPurchaseCostsUse];
+    newUnitPurchaseCostsUse[index] = value;
+    setUnitPurchaseCosts(newUnitPurchaseCostsUse);
+  };
+
+  const handleConfirmClick = (index: number) => {
+    const recipient: RecipientType = {
+      demand: demandUse[index],
+      unitSellCost: unitPurchaseCostsUse[index]
+    };
+    onConfirm(recipient, index);
+  };
+
+  return (
+    <div>
+      {items.map((item, index) => (
+        <Card key={index} shadow="sm">
+          <p>Odbiorca {index + 1}</p>
+          <NumberInput
+            label="Popyt"
+            value={demandUse[index]}
+            onChange={(value) => handleDemandInputChange(Number(value) || 0, index)}
+          />
+          <NumberInput
+            label="Jednostkowy koszt zakupu"
+            value={unitPurchaseCostsUse[index]}
+            onChange={(value) => handleUnitSellCostInputChange(Number(value) || 0, index)}
+          />
+          <Button onClick={() => handleConfirmClick(index)}>Potwierdź</Button>
+        </Card>
+      ))}
+    </div>
+  );
 };

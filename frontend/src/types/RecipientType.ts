@@ -1,4 +1,4 @@
 export type RecipientType={
     demand:number,
-    unitPurchaseCost:number
+    unitSellCost:number
 }
