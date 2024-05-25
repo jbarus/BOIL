@@ -3,6 +3,7 @@ import { RecipientType } from "../../types/RecipientType"
 import React, { useState, MouseEventHandler, useEffect } from 'react';
 import { RecipientItem } from "./recipientItem";
 import { SuplierItem } from "./SuplierItem";
+import { SupplierType } from "../../types/SuplierType";
 import { Tabela } from "./Tabela";
 export const Transportation = () => {
 
@@ -14,6 +15,23 @@ export const Transportation = () => {
 
     const [recipientUse, setrecipientUse] = useState<number>(0);
     const [inputRecipientUse, setinputRecipientUse] = useState<number | string>(0);
+
+    const [suppliers, setSuppliers] = useState<SupplierType[]>([]);
+    const [unitPurchaseCosts, setUnitPurchaseCosts] = useState<number[]>([]);
+
+    const handleSuplierDataUpdate = (data: SupplierType[]) => {
+        setSuppliers(data);
+    };
+
+    const handleUnitPurchaseCostUpdate = (data: number[]) => {
+        setUnitPurchaseCosts(data);
+    };
+
+    const calculateOnClick = () => {
+        // Tutaj możesz przetwarzać lub wykorzystywać dane suppliers i unitPurchaseCosts
+        console.log("Dostawcy:", suppliers);
+        console.log("Koszty zakupu jednostkowego:", unitPurchaseCosts);
+    };
 
     const recipientOnClick = () => {
         let test: number
@@ -31,6 +49,11 @@ export const Transportation = () => {
         setinputRecipientUse(newValue);
     };
 
+
+    const handleTableDataUpdate = (data: number[][]) => {
+        // Tutaj możesz zrobić, co chcesz z danymi, np. je zapisać w stanie
+        console.log("Dane z tabeli:", data);
+    };
     return <div>
 
         <Group>  <NumberInput
@@ -58,12 +81,13 @@ export const Transportation = () => {
         </Button>
 <Group>
         <Group style={{ alignItems: 'flex-start' }} >
-            <SuplierItem numberOfItems={supplierUse} />
+        <SuplierItem numberOfItems={supplierUse}  />
+
             <RecipientItem numberOfItems={recipientUse} />
 
             
         </Group>
-        <Tabela rows={supplierUse} cols={recipientUse} numberOfItems={3} />
+        <Tabela rows={supplierUse} cols={recipientUse} numberOfItems={1} onTableDataUpdate={handleTableDataUpdate} />
         </Group>
         <Button>
             Potwierdź Obliczenia

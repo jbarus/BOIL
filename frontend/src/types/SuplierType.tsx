@@ -1,4 +1,4 @@
 export type SupplierType={
-    suplly:number,
+    supply:number,
     unitPurchaseCost:number
 }

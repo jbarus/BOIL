@@ -4,7 +4,7 @@ import { Button, Card, NumberInput, TextInput } from "@mantine/core";
 import { SupplierType } from "../../types/SuplierType";
 
 interface SuplierItemProps {
-    item: SupplierType; // Assuming RecipientType is your item type
+    item: SupplierType; 
 }
 
 export const SuplierItem: React.FC<{ numberOfItems: number }> = ({ numberOfItems }) => {
@@ -35,4 +35,3 @@ export const SuplierItem: React.FC<{ numberOfItems: number }> = ({ numberOfItems
         </div>
     );
 };
-
