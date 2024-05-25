@@ -21,7 +21,11 @@ export const Transportation = () => {
     const [profit, setProfit] = useState<number>(0);
 
    
-    
+    const [useTable,setUseTable]=useState<Number[][]>([])
+    const [useTableKosztow,setUseTableKosztow]=useState<Number[][]>([])
+    const[demandUse,setDemandUse]=useState<Number[]>([]);
+    const[suplyUse,setSuplyUse]=useState<Number[]>([]);
+
     const [selectedSuppliers, setSelectedSuppliers] = useState<SupplierType[]>([]);
 
     const [selectedRecipients, setSelectedRecipients] = useState<RecipientType[]>([]);
@@ -61,10 +65,12 @@ export const Transportation = () => {
         setinputRecipientUse(newValue);
     };
 
-
+//
     const handleTableDataUpdate = (data: number[][]) => {
         // Tutaj możesz zrobić, co chcesz z danymi, np. je zapisać w stanie
         console.log("Dane z tabeli:", data);
+        setUseTable(data)
+
     };
     const generateRandomTable = (rows: number, cols: number): number[][] => {
         const table: number[][] = [];
@@ -79,6 +85,34 @@ export const Transportation = () => {
     };
 
     const handleGenerateTable = () => {
+//Przygotowanie danych do wysłania
+//tworzenie tabelki z odbiiorcami
+const suplyys = selectedSuppliers.map(suplier => suplier.supply);
+// Aktualizacja demandUse
+const demands = selectedRecipients.map(recipient => recipient.demand);
+
+
+
+  const tmpSuply=suplyUse
+  const tmpDemand=demandUse
+
+  
+//*************************************************************************** */
+//Wiersze i KolumnyJ
+const updatedTable = [...useTable]; // Skopiowanie istniejącej tablicy
+
+// Iteracja po dostawcach
+for (let i = 0; i < suplyys.length; i++) {
+    // Iteracja po odbiorcach
+    for (let j = 0; j < demands.length; j++) {
+        // Aktualizacja wartości komórki
+        updatedTable[i][j] = Number(useTable[i][j]) - Number(suplyys[i]) - Number(demands[j]);
+    }
+}
+console.log(useTable)
+
+
+        // Losowa tabelka jankoska
         const table = generateRandomTable(supplierUse, recipientUse);
         const anothertable = generateRandomTable(supplierUse, recipientUse);
         setTableData(table);
