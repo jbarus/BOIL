@@ -90,7 +90,7 @@ export const Transportation = () => {
             </Group>
             
             <div className="right-panel">
-                <Tabela rows={supplierUse} cols={recipientUse} numberOfItems={3} />
+                <Tabela rows={supplierUse} cols={recipientUse} numberOfItems={1} />
             </div>
             
             
@@ -113,7 +113,7 @@ export const Transportation = () => {
                         <tbody>
                             {tableData.map((row, rowIndex) => (
                                 <tr key={rowIndex}>
-                                    <td style={{ border: '1px solid black', padding: '8px' }}>Dostawca {rowIndex + 1}</td>
+                                    <td style={{ border: '1px solid black', padding: '8px', fontWeight: 'bold' }}>Dostawca {rowIndex + 1}</td>
                                     {row.map((cell, cellIndex) => (
                                         <td key={cellIndex} style={{ border: '1px solid black', padding: '8px' }}>{cell}</td>
                                     ))}
@@ -139,7 +139,7 @@ export const Transportation = () => {
                         <tbody>
                             {anotherTableData.map((row, rowIndex) => (
                                 <tr key={rowIndex}>
-                                    <td style={{ border: '1px solid black', padding: '8px' }}>Dostawca {rowIndex + 1}</td>
+                                    <td style={{ border: '1px solid black', padding: '8px' , fontWeight: 'bold'}}>Dostawca {rowIndex + 1}</td>
                                     {row.map((cell, cellIndex) => (
                                         <td key={cellIndex} style={{ border: '1px solid black', padding: '8px' }}>{cell}</td>
                                     ))}
@@ -147,9 +147,9 @@ export const Transportation = () => {
                             ))}
                         </tbody>
                     </table>
-                    <p>Całkowity koszt: {totalCost}</p>
-                    <p>Przychód: {income}</p>
-                    <p>Zysk: {profit}</p>
+                    <p style={{ fontWeight: 'bold' }}>Całkowity koszt: {totalCost}</p>
+                    <p style={{ fontWeight: 'bold' }}>Przychód: {income}</p>
+                    <p style={{ fontWeight: 'bold' }}>Zysk: {profit}</p>
                 </div>
             )}
         </div>

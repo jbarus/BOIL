@@ -30,7 +30,7 @@ export const Tabela: React.FC<TabelaProps> = ({ rows, cols, numberOfItems }) => 
                 <tbody>
                     {Array.from({ length: rows }).map((_, rowIndex) => (
                         <tr key={rowIndex}>
-                            <td>Dostawca nr {rowIndex + 1}</td> 
+                            <td style={{ padding: '8px', fontWeight: 'bold' }}>Dostawca nr {rowIndex + 1}</td>
                             {Array.from({ length: cols }).map((_, colIndex) => (
                                 <td key={`${rowIndex}-${colIndex}`}>
                                     <NumberInput

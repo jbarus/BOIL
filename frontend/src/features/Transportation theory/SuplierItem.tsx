@@ -14,22 +14,10 @@ export const SuplierItem: React.FC<{ numberOfItems: number }> = ({ numberOfItems
         <div>
             {items.map((item, index) => (
                 <Card key={index} shadow="sm">
-             Dostawca 
-             <NumberInput
-              label="Podaż"
-              >
-            
-             </NumberInput>
-
-             <NumberInput
-              label="Jednostkowy koszt zakupu"
-              >
-            
-             </NumberInput>
-                    
-                    <Button>
-                        Potwierdź
-                    </Button>
+                    <p>Dostawca {index + 1}</p>
+                    <NumberInput label="Podaż" />
+                    <NumberInput label="Jednostkowy koszt zakupu" />
+                    <Button>Potwierdź</Button>
                 </Card>
             ))}
         </div>

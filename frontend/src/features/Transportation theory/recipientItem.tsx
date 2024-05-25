@@ -13,22 +13,10 @@ export const RecipientItem: React.FC<{ numberOfItems: number }> = ({ numberOfIte
         <div>
             {items.map((item, index) => (
                 <Card key={index} shadow="sm">
-             Odbiorca
-             <NumberInput
-              label="Popyt"
-              >
-            
-             </NumberInput>
-
-             <NumberInput
-              label="Jednostkowy koszt zakupu"
-              >
-            
-             </NumberInput>
-                    
-                    <Button>
-                        Potwierdź
-                    </Button>
+                    <p>Odbiorca {index + 1}</p>
+                    <NumberInput label="Popyt" />
+                    <NumberInput label="Jednostkowy koszt zakupu" />
+                    <Button>Potwierdź</Button>
                 </Card>
             ))}
         </div>
