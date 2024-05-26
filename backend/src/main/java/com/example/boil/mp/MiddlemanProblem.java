@@ -16,8 +16,19 @@ public class MiddlemanProblem {
     int[] u;
     int[][] penalties;
 
+    int[] sellPrice;
+
+    int[] purchasePrice;
+
+    int[][] transportPrice;
+
     public MiddlemanProblem(MiddlemanRequest request) {
-        this.profits = request.getProfits();
+        profits = new int[request.getTransportPrice().length][request.getTransportPrice()[0].length];
+        for (int i = 0; i < profits.length; i++) {
+            for (int j = 0; j < profits[0].length; j++) {
+                profits[i][j] = request.getSellPrice()[j] - request.getTransportPrice()[i][j] - request.getPurchasePrice()[i];
+            }
+        }
         this.supplies = request.getSupplies();
         this.demands = request.getDemands();
         solution = new int[profits.length][profits[0].length];
@@ -26,6 +37,9 @@ public class MiddlemanProblem {
         Arrays.fill(v, Integer.MAX_VALUE);
         Arrays.fill(u, Integer.MAX_VALUE);
         penalties = new int[profits.length][profits[0].length];
+        sellPrice = request.getSellPrice();
+        purchasePrice = request.getPurchasePrice();
+        transportPrice = request.getTransportPrice();
     }
 
     public MiddlemanResponse solve(){
@@ -52,8 +66,25 @@ public class MiddlemanProblem {
             calculateVandU();
             calculatePenalties();
         }
+
+        int[][] individualProfit = new int[solution.length][solution[0].length];
+        int totalCost = 0;
+        int totalIncome = 0;
+        int totalProfit = 0;
+        for (int i = 0; i < solution.length-1; i++) {
+            for (int j = 0; j < solution[0].length-1; j++) {
+                individualProfit[i][j] = profits[i][j]*solution[i][j];
+                totalCost += transportPrice[i][j]*solution[i][j]+purchasePrice[i]*solution[i][j];
+                totalIncome += solution[i][j]*sellPrice[j];
+                totalProfit += individualProfit[i][j];
+            }
+        }
         MiddlemanResponse middlemanResponse = new MiddlemanResponse();
         middlemanResponse.setOptimalSolution(solution);
+        middlemanResponse.setTotalCost(totalCost);
+        middlemanResponse.setTotalIncome(totalIncome);
+        middlemanResponse.setTotalProfit(totalProfit);
+        middlemanResponse.setIndividualProfit(individualProfit);
         return middlemanResponse;
     }
 
@@ -83,6 +114,21 @@ public class MiddlemanProblem {
 
         Arrays.fill(v, Integer.MAX_VALUE);
         Arrays.fill(u, Integer.MAX_VALUE);
+
+        int[] newSellPrice = new int[sellPrice.length+1];
+        System.arraycopy(sellPrice, 0, newSellPrice, 0, sellPrice.length);
+
+        int[] newPurchasePrice = new int[purchasePrice.length+1];
+        System.arraycopy(purchasePrice, 0, newPurchasePrice, 0, purchasePrice.length);
+
+        sellPrice = newSellPrice;
+        purchasePrice = newPurchasePrice;
+
+        int[][] newTransportPrice = new int[transportPrice.length+1][transportPrice[0].length+1];
+        for (int i = 0; i < transportPrice.length; i++) {
+            System.arraycopy(transportPrice[i], 0, newTransportPrice[i], 0, transportPrice[0].length);
+        }
+        transportPrice = newTransportPrice;
     }
 
     private List<int[]> findLoop(int x, int y) {
