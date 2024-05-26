@@ -53,7 +53,7 @@ export const RecipientItem: React.FC<RecipientItemProps> = ({ numberOfItems, onC
           />
           <NumberInput
             allowNegative={false}
-            label="Jednostkowy koszt zakupu"
+            label="Jednostkowy koszt sprzedaży"
             value={unitPurchaseCostsUse[index]}
             onChange={(value) => handleUnitSellCostInputChange(Number(value) || 0, index)}
           />

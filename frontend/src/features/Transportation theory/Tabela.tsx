@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, NumberInput, Button, Group, TextInput } from '@mantine/core';
+import { Table, NumberInput, Button, Group, TextInput,Text } from '@mantine/core';
 
 
 
@@ -12,7 +12,7 @@ interface TabelaProps {
 
 export const Tabela: React.FC<TabelaProps> = ({ rows, cols, numberOfItems, onTableDataUpdate }) => {
     const [data, setData] = useState<number[][]>([]);
-
+    const [text, setText] = useState<string>();
     useEffect(() => {
         setData(
             Array.from({ length: rows }, () =>
@@ -32,13 +32,18 @@ export const Tabela: React.FC<TabelaProps> = ({ rows, cols, numberOfItems, onTab
 
     const handleConfirmClick = () => {
         // Przekazanie danych do rodzica
+
+        
         onTableDataUpdate(data);
     };
 
     return (
         <div className="right-panel">
+           
             <Table>
+               
                 <thead>
+                <Text size="lg" fw={700}>{text}</Text>
                     <tr>
                         <th></th>
                         {Array.from({ length: cols }).map((_, colIndex) => (
@@ -66,7 +71,7 @@ export const Tabela: React.FC<TabelaProps> = ({ rows, cols, numberOfItems, onTab
                 </tbody>
             </Table>
             <Button onClick={handleConfirmClick}>
-                Potwierdź
+                Potwiredź
             </Button>
         </div>
     );
