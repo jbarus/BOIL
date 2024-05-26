@@ -52,12 +52,12 @@ public class MiddlemanProblem {
         //Stage 3 -
         calculatePenalties();
         //Stage 4 -
-        System.out.println("Dupa");
+        //System.out.println("Dupa");
         while (true){
             int[] max = findMaximumPenalty(penalties);
             if(penalties[max[0]][max[1]]<=0)
                 break;
-            List<int[]> coordinates = findLoop(max[0],max[1]);
+            List<int[]> coordinates = findLoop(max);
             int min = Math.min(solution[coordinates.get(1)[0]][coordinates.get(1)[1]],solution[coordinates.get(3)[0]][coordinates.get(3)[1]]);
             solution[coordinates.get(0)[0]][coordinates.get(0)[1]] += min;
             solution[coordinates.get(1)[0]][coordinates.get(1)[1]] -=min;
@@ -131,7 +131,7 @@ public class MiddlemanProblem {
         transportPrice = newTransportPrice;
     }
 
-    private List<int[]> findLoop(int x, int y) {
+    /*private List<int[]> findLoop(int x, int y) {
         List<int[]> loop = new ArrayList<>();
 
         if (y - 1 >= 0 && x - 1 >= 0) {
@@ -175,6 +175,42 @@ public class MiddlemanProblem {
         }
 
         return loop;
+    }*/
+
+    private List<int[]> findLoop(int[] startPoint) {
+        int[][] newTab = new int[solution.length][solution[0].length];
+        List<int[]> loop = new ArrayList<>();
+        for (int i = 0; i < newTab.length; i++) {
+            for (int j = 0; j < newTab[0].length; j++) {
+                if (solution[i][j] != 0 && i != startPoint[0] && j != startPoint[1])
+                    newTab[i][j] = 1;
+            }
+        }
+
+        for (int i = 0; i < newTab.length; i++) {
+            for (int j = 0; j < newTab[0].length; j++) {
+                if (newTab[i][j] == 1) {
+                    //System.out.printf("Diagonal point found at: %d %d \n", i, j);
+                    // Check the remaining sides of the rectangle
+                    if (checkRectangle(startPoint, i, j)) {
+                        loop.add(new int[]{startPoint[0], startPoint[1]});
+                        loop.add(new int[]{startPoint[0] , j});
+                        loop.add(new int[]{i, j});
+                        loop.add(new int[]{i, startPoint[1]});
+                        //System.out.printf("Valid rectangle found with diagonal points (%d, %d) and (%d, %d)\n", startPoint[0], startPoint[1], i, j);
+                        //System.out.printf("Sides: %d %d \n", startPoint[0] , j);
+                        //System.out.printf("Sides: %d %d \n", i, startPoint[1]);
+                    }
+                }
+            }
+        }
+        return loop;
+    }
+
+    public boolean checkRectangle(int[] startPoint, int x, int y) {
+        // Ensure the points lie on the sides of the rectangle formed by (startPoint[0], startPoint[1]) and (x, y)
+        // and both sides contain positive values.
+        return (solution[startPoint[0]][y] > 0 && solution[x][startPoint[1]] > 0);
     }
 
     /*private int[] findLoop(int x, int y) {
