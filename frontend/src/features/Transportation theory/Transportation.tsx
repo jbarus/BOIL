@@ -251,43 +251,69 @@ export const Transportation = () => {
                                 {Array.from({ length: recipientUse }, (_, index) => (
                                     <th key={index} style={{ border: '1px solid black', padding: '8px' }}>Odbiorca {index + 1}</th>
                                 ))}
+                                {tableData[0].length > recipientUse && (
+                                    <th style={{ border: '1px solid black', padding: '8px' }}>Odbiorca Fikcyjny</th>
+                                )}
                             </tr>
                         </thead>
                         <tbody>
                             {tableData.map((row, rowIndex) => (
                                 <tr key={rowIndex}>
-                                    <td style={{ border: '1px solid black', padding: '8px', fontWeight: 'bold' }}>Dostawca {rowIndex + 1}</td>
+                                    <td style={{ border: '1px solid black', padding: '8px', fontWeight: 'bold' }}>
+                                        Dostawca {rowIndex + 1}
+                                    </td>
                                     {row.map((cell, cellIndex) => (
                                         <td key={cellIndex} style={{ border: '1px solid black', padding: '8px' }}>{cell}</td>
                                     ))}
                                 </tr>
                             ))}
+                            {tableData.length > supplierUse && (
+                                <tr>
+                                    <td style={{ border: '1px solid black', padding: '8px', fontWeight: 'bold' }}>Dostawca Fikcyjny</td>
+                                    {tableData[0].map((_, cellIndex) => (
+                                        <td key={cellIndex} style={{ border: '1px solid black', padding: '8px' }}>{tableData[supplierUse][cellIndex]}</td>
+                                    ))}
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
             )}
 
             {anotherTableData.length > 0 && (
-                <div style={{ marginTop: '20px' }}>
-                    <h3>Optymalny transport:</h3>
-                    <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-                        <thead>
-                            <tr>
-                                <th style={{ border: '1px solid black', padding: '8px' }}>Dostawca\Odbiorca</th>
-                                {Array.from({ length: recipientUse }, (_, index) => (
-                                    <th key={index} style={{ border: '1px solid black', padding: '8px' }}>Odbiorca {index + 1}</th>
-                                ))}
+                        <div style={{ marginTop: '20px' }}>
+                            <h3>Optymalny transport:</h3>
+                            <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+                                <thead>
+                                    <tr>
+                                        <th style={{ border: '1px solid black', padding: '8px' }}>Dostawca\Odbiorca</th>
+                                        {Array.from({ length: recipientUse }, (_, index) => (
+                                            <th key={index} style={{ border: '1px solid black', padding: '8px' }}>Odbiorca {index + 1}</th>
+                                        ))}
+                                    {anotherTableData[0].length > recipientUse && (
+                                 <th style={{ border: '1px solid black', padding: '8px' }}>Odbiorca Fikcyjny</th>
+                                )}
                             </tr>
                         </thead>
                         <tbody>
                             {anotherTableData.map((row, rowIndex) => (
                                 <tr key={rowIndex}>
-                                    <td style={{ border: '1px solid black', padding: '8px', fontWeight: 'bold' }}>Dostawca {rowIndex + 1}</td>
+                                    <td style={{ border: '1px solid black', padding: '8px', fontWeight: 'bold' }}>
+                                        Dostawca {rowIndex + 1}
+                                    </td>
                                     {row.map((cell, cellIndex) => (
                                         <td key={cellIndex} style={{ border: '1px solid black', padding: '8px' }}>{cell}</td>
                                     ))}
                                 </tr>
                             ))}
+                            {anotherTableData.length > supplierUse && (
+                                <tr>
+                                    <td style={{ border: '1px solid black', padding: '8px', fontWeight: 'bold' }}>Dostawca Fikcyjny</td>
+                                    {anotherTableData[0].map((_, cellIndex) => (
+                                        <td key={cellIndex} style={{ border: '1px solid black', padding: '8px' }}>{anotherTableData[supplierUse][cellIndex]}</td>
+                                    ))}
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                     <p style={{ fontWeight: 'bold' }}>Całkowity koszt: {totalCost}</p>
