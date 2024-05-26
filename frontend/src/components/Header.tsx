@@ -4,7 +4,7 @@ export const Header = () => {
     return (
         <div>
 
-            <Link to={'/transport'}>Transportation</Link> |  <Link to={'/CPM/new'}>Dodaj</Link>
+            <Link to={'/transport'}>Middleman</Link> |  <Link to={'/CPM/new'}>CPM</Link>
         </div>
     )
 }

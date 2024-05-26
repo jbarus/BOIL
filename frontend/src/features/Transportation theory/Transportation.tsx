@@ -7,6 +7,17 @@ import { SupplierType } from "../../types/SuplierType";
 
 import { Tabela } from "./Tabela";
 
+interface ResponseBody {
+    individualProfit: number[][];        // Zakładam, że to jest tablica liczb
+    optimalSolution: number[][];              // Ustaw odpowiedni typ zamiast `any`, np. tablica lub obiekt
+    totalCost: number;                 // Zakładam, że to jest liczba
+    totalIncome: number;               // Zakładam, że to jest liczba
+    totalProfit: number;               // Zakładam, że to jest liczba
+}
+
+
+const BASE_API_URL = "http://localhost:8080/api/v1/mp"
+
 export const Transportation = () => {
 
     const [supplierUse, setSuplierUse] = useState<number>(0);
@@ -16,35 +27,42 @@ export const Transportation = () => {
     const [inputRecipientUse, setinputRecipientUse] = useState<number | string>(0);
     const [tableData, setTableData] = useState<number[][]>([]);
     const [anotherTableData, setAnotherTableData] = useState<number[][]>([]);
-    const [totalCost, setTotalCost] = useState<number>(0);
+
     const [income, setIncome] = useState<number>(0);
     const [profit, setProfit] = useState<number>(0);
 
-   
-    const [useTable,setUseTable]=useState<Number[][]>([])
-    const [useTableKosztow,setUseTableKosztow]=useState<Number[][]>([])
-    const[demandUse,setDemandUse]=useState<Number[]>([]);
-    const[suplyUse,setSuplyUse]=useState<Number[]>([]);
+
+    const [useTable, setUseTable] = useState<Number[][]>([])
+    const [demandUse, setDemandUse] = useState<Number[]>([]);
+    const [suplyUse, setSuplyUse] = useState<Number[]>([]);
 
     const [selectedSuppliers, setSelectedSuppliers] = useState<SupplierType[]>([]);
 
     const [selectedRecipients, setSelectedRecipients] = useState<RecipientType[]>([]);
 
-   
-  const handleConfirmSupplier = (supplier: SupplierType, index: number) => {
-    
-    const updatedSuppliers = [...selectedSuppliers];
-    updatedSuppliers[index] = supplier;
-    setSelectedSuppliers(updatedSuppliers);
-    console.log(selectedSuppliers)
-  };
-  const handleConfirmRecipient = (recipient: RecipientType, index: number) => {
-    
-    const updatedRecipients = [...selectedRecipients];
-    updatedRecipients[index] = recipient;
-    setSelectedRecipients(updatedRecipients);
-    console.log(selectedRecipients)
-  };
+
+    const [individualProfit, setIndividualProfit] = useState<number[][]>([]);
+    const [optimalSolution, setOptimalSolution] = useState<number[][]>([]);
+    const [totalCost, setTotalCost] = useState<number>(0);
+    const [totalIncome, setTotalIncome] = useState<number>(0);
+    const [totalProfit, setTotalProfit] = useState<number>(0);
+
+
+
+    const handleConfirmSupplier = (supplier: SupplierType, index: number) => {
+
+        const updatedSuppliers = [...selectedSuppliers];
+        updatedSuppliers[index] = supplier;
+        setSelectedSuppliers(updatedSuppliers);
+        console.log(selectedSuppliers)
+    };
+    const handleConfirmRecipient = (recipient: RecipientType, index: number) => {
+
+        const updatedRecipients = [...selectedRecipients];
+        updatedRecipients[index] = recipient;
+        setSelectedRecipients(updatedRecipients);
+        console.log(selectedRecipients)
+    };
 
 
 
@@ -65,7 +83,7 @@ export const Transportation = () => {
         setinputRecipientUse(newValue);
     };
 
-//
+    //
     const handleTableDataUpdate = (data: number[][]) => {
         // Tutaj możesz zrobić, co chcesz z danymi, np. je zapisać w stanie
         console.log("Dane z tabeli:", data);
@@ -85,47 +103,106 @@ export const Transportation = () => {
     };
 
     const handleGenerateTable = () => {
-//Przygotowanie danych do wysłania
-//tworzenie tabelki z odbiiorcami
-const suplyys = selectedSuppliers.map(suplier => suplier.supply);
-// Aktualizacja demandUse
-const demands = selectedRecipients.map(recipient => recipient.demand);
+        //Przygotowanie danych do wysłania
+        //tworzenie tabelki z odbiiorcami
+        const suplyys = selectedSuppliers.map(suplier => suplier.supply);
+        // Aktualizacja demandUse
+        const demands = selectedRecipients.map(recipient => recipient.demand);
+
+        const purchusePrice = selectedSuppliers.map(suplier => suplier.unitPurchaseCost);
+
+
+        const sellPrice = selectedRecipients.map(recipient => recipient.unitSellCost);
+
+        setSuplyUse(suplyys)
+        setDemandUse(demands)
 
 
 
-  const tmpSuply=suplyUse
-  const tmpDemand=demandUse
-
-  
-//*************************************************************************** */
-//Wiersze i KolumnyJ
-const updatedTable = [...useTable]; // Skopiowanie istniejącej tablicy
-
-// Iteracja po dostawcach
-for (let i = 0; i < suplyys.length; i++) {
-    // Iteracja po odbiorcach
-    for (let j = 0; j < demands.length; j++) {
-        // Aktualizacja wartości komórki
-        updatedTable[i][j] = Number(useTable[i][j]) - Number(suplyys[i]) - Number(demands[j]);
-    }
-}
-console.log(useTable)
+        console.log(useTable)
+        console.log("Supleies " + suplyys + " Demands " + demands)
+        fetchData()
 
 
         // Losowa tabelka jankoska
-        const table = generateRandomTable(supplierUse, recipientUse);
-        const anothertable = generateRandomTable(supplierUse, recipientUse);
+        const table =individualProfit;
+        const anothertable = optimalSolution;
         setTableData(table);
         setAnotherTableData(anothertable);
-        const totalCostValue = Math.floor(Math.random() * 1000);
-        const incomeValue = Math.floor(Math.random() * 1000);
-        const profitValue = incomeValue - totalCostValue;
+        const totalCostValue = totalCost;
+        const incomeValue = totalIncome;
+        const profitValue = totalProfit;
         setTotalCost(totalCostValue);
         setIncome(incomeValue);
         setProfit(profitValue);
     };
 
-        return (
+
+    const fetchData = async () => {
+        try {
+            const purchusePrice = selectedSuppliers.map(suplier => suplier.unitPurchaseCost);
+
+
+            const sellPrice = selectedRecipients.map(recipient => recipient.unitSellCost);
+
+            const requestBody = {
+                supplies: suplyUse,  // Załóżmy, że `suplyUse` jest już zdefiniowane
+                demands: demandUse,
+                transportPrice: useTable,
+                sellPrice: sellPrice,
+                purchasePrice: purchusePrice
+            };
+            console.log(JSON.stringify(requestBody));
+            const response = await fetch(BASE_API_URL + '/middleman', {
+
+                method: 'POST',
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            }
+
+            );
+            if (response.ok) {
+                const initialIndividualProfit: number[][] = [];
+                const initialOptimalSolution: number[][] = [];
+                const initialTotalCost: number = 0;
+                const initialTotalIncome: number = 0;
+                const initialTotalProfit: number = 0;
+
+                let responseBody: ResponseBody = {
+                    individualProfit: initialIndividualProfit,
+                    optimalSolution: initialOptimalSolution,
+                    totalCost: initialTotalCost,
+                    totalIncome: initialTotalIncome,
+                    totalProfit: initialTotalProfit
+                };
+
+
+
+                responseBody = await response.json();
+                console.log('Success');
+                console.log(responseBody);
+                setIndividualProfit(responseBody.individualProfit);
+                setOptimalSolution(responseBody.optimalSolution)
+                setTotalCost(responseBody.totalCost)
+                setTotalIncome(responseBody.totalIncome)
+                setTotalProfit(responseBody.totalProfit)
+
+
+
+            } else {
+                console.error('Error ');
+            }
+        }
+        catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    return (
         <div>
             <Group>
                 <NumberInput
@@ -151,14 +228,14 @@ console.log(useTable)
             </Button>
 
             <Group style={{ alignItems: 'flex-start' }}>
-                <SuplierItem numberOfItems={supplierUse}  onConfirm={handleConfirmSupplier}  />
-                <RecipientItem numberOfItems={recipientUse} onConfirm={handleConfirmRecipient}  />
+                <SuplierItem numberOfItems={supplierUse} onConfirm={handleConfirmSupplier} />
+                <RecipientItem numberOfItems={recipientUse} onConfirm={handleConfirmRecipient} />
             </Group>
-            
+
             <div className="right-panel">
-                <Tabela rows={supplierUse} cols={recipientUse} numberOfItems={1}  onTableDataUpdate={handleTableDataUpdate} />
+                <Tabela rows={supplierUse} cols={recipientUse} numberOfItems={1} onTableDataUpdate={handleTableDataUpdate} />
             </div>
-            
+
             {/* Tabela ************************* */}
             <Button onClick={handleGenerateTable}>
                 Potwierdź Obliczenia
@@ -189,7 +266,7 @@ console.log(useTable)
                     </table>
                 </div>
             )}
-            
+
             {anotherTableData.length > 0 && (
                 <div style={{ marginTop: '20px' }}>
                     <h3>Optymalny transport:</h3>
@@ -205,7 +282,7 @@ console.log(useTable)
                         <tbody>
                             {anotherTableData.map((row, rowIndex) => (
                                 <tr key={rowIndex}>
-                                    <td style={{ border: '1px solid black', padding: '8px' , fontWeight: 'bold'}}>Dostawca {rowIndex + 1}</td>
+                                    <td style={{ border: '1px solid black', padding: '8px', fontWeight: 'bold' }}>Dostawca {rowIndex + 1}</td>
                                     {row.map((cell, cellIndex) => (
                                         <td key={cellIndex} style={{ border: '1px solid black', padding: '8px' }}>{cell}</td>
                                     ))}
