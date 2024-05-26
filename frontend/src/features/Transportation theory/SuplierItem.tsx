@@ -41,11 +41,13 @@ interface SuplierItemProps {
           <Card key={index} shadow="sm">
             <p>Dostawca {index + 1}</p>
             <NumberInput
+            allowNegative={false}
               label="Podaż"
               value={supplies[index]}
               onChange={(value) => handleSupplyInputChange(Number(value), index)}
             />
             <NumberInput
+            allowNegative={false}
               label="Jednostkowy koszt zakupu"
               value={unitPurchaseCosts[index]}
               onChange={(value) => handleUnitPurchaseCostInputChange(Number(value), index)}

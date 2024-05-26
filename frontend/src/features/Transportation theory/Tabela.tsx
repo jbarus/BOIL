@@ -53,6 +53,7 @@ export const Tabela: React.FC<TabelaProps> = ({ rows, cols, numberOfItems, onTab
                             {Array.from({ length: cols }).map((_, colIndex) => (
                                 <td key={`${rowIndex}-${colIndex}`}>
                                     <NumberInput
+                                        allowNegative={false}
                                         description={`Cena transportu`}
                                         placeholder="0"
                                         value={data[rowIndex]?.[colIndex] || 0}

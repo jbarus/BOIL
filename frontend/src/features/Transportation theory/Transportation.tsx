@@ -85,6 +85,14 @@ export const Transportation = () => {
 
     //
     const handleTableDataUpdate = (data: number[][]) => {
+        const suplyys = selectedSuppliers.map(suplier => suplier.supply);
+        // Aktualizacja demandUse
+        const demands = selectedRecipients.map(recipient => recipient.demand);
+
+        
+
+        setSuplyUse(suplyys)
+        setDemandUse(demands)
         // Tutaj możesz zrobić, co chcesz z danymi, np. je zapisać w stanie
         console.log("Dane z tabeli:", data);
         setUseTable(data)
@@ -102,30 +110,21 @@ export const Transportation = () => {
         return table;
     };
 
-    const handleGenerateTable = () => {
+    const   handleGenerateTable =  () => {
         //Przygotowanie danych do wysłania
         //tworzenie tabelki z odbiiorcami
-        const suplyys = selectedSuppliers.map(suplier => suplier.supply);
-        // Aktualizacja demandUse
-        const demands = selectedRecipients.map(recipient => recipient.demand);
-
-        const purchusePrice = selectedSuppliers.map(suplier => suplier.unitPurchaseCost);
-
-
-        const sellPrice = selectedRecipients.map(recipient => recipient.unitSellCost);
-
-        setSuplyUse(suplyys)
-        setDemandUse(demands)
+      
 
 
 
         console.log(useTable)
-        console.log("Supleies " + suplyys + " Demands " + demands)
-        fetchData()
+        console.log("Supleies " + suplyUse + " Demands " + demandUse
+        )
+         fetchData()
 
 
         // Losowa tabelka jankoska
-        const table =individualProfit;
+        const table = individualProfit;
         const anothertable = optimalSolution;
         setTableData(table);
         setAnotherTableData(anothertable);
@@ -206,6 +205,7 @@ export const Transportation = () => {
         <div>
             <Group>
                 <NumberInput
+                    allowNegative={false}
                     label="Liczba dostawców"
                     description="Wprowadź liczbę dostawców"
                     placeholder="0"
@@ -230,11 +230,12 @@ export const Transportation = () => {
             <Group style={{ alignItems: 'flex-start' }}>
                 <SuplierItem numberOfItems={supplierUse} onConfirm={handleConfirmSupplier} />
                 <RecipientItem numberOfItems={recipientUse} onConfirm={handleConfirmRecipient} />
+                <div className="right-panel">
+                    <Tabela rows={supplierUse} cols={recipientUse} numberOfItems={1} onTableDataUpdate={handleTableDataUpdate} />
+                </div>
             </Group>
 
-            <div className="right-panel">
-                <Tabela rows={supplierUse} cols={recipientUse} numberOfItems={1} onTableDataUpdate={handleTableDataUpdate} />
-            </div>
+
 
             {/* Tabela ************************* */}
             <Button onClick={handleGenerateTable}>
