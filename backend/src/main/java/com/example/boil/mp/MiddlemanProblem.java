@@ -54,10 +54,21 @@ public class MiddlemanProblem {
         //Stage 4 -
         //System.out.println("Dupa");
         while (true){
-            int[] max = findMaximumPenalty(penalties);
-            if(penalties[max[0]][max[1]]<=0)
+            List<int[]> coordinates = new ArrayList<>();
+            int counter = 0;
+            int highestPrevious = Integer.MAX_VALUE;
+            while(coordinates.isEmpty() && counter < 10){
+                int[] max = findMaximumPenalty(penalties,highestPrevious);
+                highestPrevious = penalties[max[0]][max[1]];
+                if(penalties[max[0]][max[1]]<=0)
+                    break;
+                coordinates = findLoop(max);
+                counter++;
+            }
+            if(coordinates.isEmpty()){
                 break;
-            List<int[]> coordinates = findLoop(max);
+            }
+
             int min = Math.min(solution[coordinates.get(1)[0]][coordinates.get(1)[1]],solution[coordinates.get(3)[0]][coordinates.get(3)[1]]);
             solution[coordinates.get(0)[0]][coordinates.get(0)[1]] += min;
             solution[coordinates.get(1)[0]][coordinates.get(1)[1]] -=min;
