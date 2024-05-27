@@ -212,6 +212,7 @@ export const Transportation = () => {
                     onChange={handleSupplierInputChange}
                 />
                 <NumberInput
+                    allowNegative={false}
                     label="Liczba odbiorców"
                     description="Wprowadź liczbę odbiorców"
                     placeholder="0"
