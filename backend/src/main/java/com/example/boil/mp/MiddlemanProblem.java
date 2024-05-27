@@ -282,13 +282,13 @@ public class MiddlemanProblem {
         return false;
     }*/
 
-    private int[] findMaximumPenalty(int[][] penalties) {
+    private int[] findMaximumPenalty(int[][] penalties, int highestPrevious) {
         int max = 0;
         int iMax = 0;
         int jMax = 0;
         for (int i = 0; i < penalties.length; i++) {
             for (int j = 0; j < penalties[0].length; j++) {
-                if(penalties[i][j]>max){
+                if(penalties[i][j]>max && penalties[i][j]<highestPrevious){
                     iMax = i;
                     jMax = j;
                     max = penalties[i][j];
